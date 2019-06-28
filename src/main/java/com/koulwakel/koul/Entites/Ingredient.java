@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -20,5 +17,12 @@ public class Ingredient implements Serializable {
 
     private String name ;
 
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image image ;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category ;
 }

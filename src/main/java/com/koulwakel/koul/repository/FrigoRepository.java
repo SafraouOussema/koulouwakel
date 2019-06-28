@@ -1,4 +1,8 @@
 package com.koulwakel.koul.repository;
 
-public interface FrigoRepository {
+import com.koulwakel.koul.Entites.Frigo;
+import com.koulwakel.koul.Entites.FrigoPk;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface FrigoRepository extends JpaRepository<Frigo, FrigoPk> {
 }
