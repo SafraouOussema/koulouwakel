@@ -2,7 +2,10 @@ package com.koulwakel.koul.Web;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
@@ -15,10 +18,13 @@ import com.koulwakel.koul.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class WebImage {
     private static final Logger log = LoggerFactory.getLogger(WebImage.class);
+
+    public static String uploadDirectory = System.getProperty("user.dir")+"/uploads/";
 
     @Autowired
     ImageRepository imageRepository;
@@ -51,7 +57,31 @@ public class WebImage {
     {
 
        Image i =  imageRepository.findById(idimage).get();
-      return   Files.readAllBytes(Paths.get(System.getProperty("user.home")+"/koul/images/"+i.getLabelle()));
+      return   Files.readAllBytes(Paths.get(this.uploadDirectory+i.getLabelle()));
+
+
+    }
+
+    @PostMapping(path = "/postimage")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public  byte[]  uploadImage( @RequestParam("file") MultipartFile file)  throws Exception
+
+    {
+      //  StringBuilder fileNames = new StringBuilder();
+        /*for (MultipartFile file : files) {*/
+           Path fileNameAndPath = Paths.get(uploadDirectory, file.getOriginalFilename());
+          // SeekableByteChannel destFileChannel = Files.newByteChannel(fileNameAndPath);
+       //    destFileChannel.close();
+          //  fileNames.append(file.getOriginalFilename()+" ");
+           try{
+                Files.write(fileNameAndPath, file.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        return   Files.readAllBytes(Paths.get(this.uploadDirectory+""));
+
+
 
 
     }
